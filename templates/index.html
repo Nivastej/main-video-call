@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Flask Full Screen Splash</title>
     <style>
+        html {
+            scroll-behavior: smooth;
+        }
         /* Base Reset */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body, html { 
@@ -128,6 +131,7 @@
         /* --- Footer (Same Grey as Top) --- */
         footer {
             background-color: #262323;
+            color: #FFFFFF;
             padding: 40px 5%;
             text-align: center;
             border-top: 1px solid #ccc;
@@ -151,10 +155,10 @@
             
             <nav>
                 <ul>
-                    <li><a href="#">Darja</a></li>
-                    <li><a href="#">How it works</a></li>
-                    <li><a href="#">Features</a></li>
-                    <li><a href="#">Go premium</a></li>
+                    <li><a href="/" class="home-link">Darja</a></li>
+                    <li><a href="#how-it-works">How it works</a></li>
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#premium">Go premium</a></li>
                 </ul>
             </nav>
         </div>
