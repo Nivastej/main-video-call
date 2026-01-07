@@ -3,12 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flask Full Screen Splash</title>
+    <title>Darja | Stream Together</title>
     <style>
-        html {
-            scroll-behavior: smooth;
-        }
-        /* Base Reset */
+        html { scroll-behavior: smooth; }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body, html { 
             height: 100%; 
@@ -20,32 +17,24 @@
         #splash {
             position: fixed;
             inset: 0;
-            background: #000; /* Black background while image loads */
+            background: #000;
             display: flex;
             justify-content: center;
             align-items: center;
-            z-index: 10000; /* Highest priority */
+            z-index: 10000;
             transition: opacity 1s ease-in-out, visibility 1s;
         }
-
         #splash img {
             width: 100vw;
             height: 100vh;
-            object-fit: cover; /* Ensures logo covers full screen without stretching */
+            object-fit: cover;
             animation: zoomIn 2s ease-out forwards;
         }
-
-        /* Classic opening animation: Image starts slightly larger and zooms to normal */
         @keyframes zoomIn {
             from { transform: scale(1.1); opacity: 0.8; }
             to { transform: scale(1); opacity: 1; }
         }
-
-        /* Fade out class for JavaScript */
-        #splash.hidden { 
-            opacity: 0; 
-            visibility: hidden; 
-        }
+        #splash.hidden { opacity: 0; visibility: hidden; }
 
         /* --- Sticky Header --- */
         header {
@@ -53,40 +42,44 @@
             top: 0;
             width: 100%;
             height: 70px;
-            background-color: #262323; /* Or #262323 */
+            background-color: #262323;
             display: flex;
             align-items: center;
-            justify-content: space-between; /* Space between the left group and the button */
+            justify-content: space-between;
             padding: 0 5%;
             z-index: 1000;
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+            /* 5px Shadow Effect */
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
         }
 
-        /* Container for Logo + Links */
         .header-left {
             display: flex;
             align-items: center;
-            gap: 40px; /* Equal spacing between logo and links */
+            gap: 40px;
         }
 
-        /* Navigation List */
         nav ul {
             display: flex;
             list-style: none;
-            gap: 30px; /* Equal spacing between each link */
+            gap: 30px;
         }
 
         nav ul li a {
-            color: white; /* White text as requested */
+            color: white;
             text-decoration: none;
             font-weight: 500;
-            white-space: nowrap; /* Prevents text from breaking */
+            transition: 0.3s;
         }
 
-        /* Header Button (Right Side) */
+        /* Custom Home Link Color */
+        nav ul li a.home-link {
+            color: #4CAF50; /* Cute Green color */
+            font-weight: bold;
+        }
+
         .header-btn {
             background-color: white;
-            color: green; /* Contrast color */
+            color: #262323;
             border: none;
             padding: 8px 20px;
             border-radius: 20px;
@@ -100,14 +93,30 @@
             transform: scale(1.05);
         }
 
-        /* Mobile Responsive */
-        @media (max-width: 850px) {
-            .header-left { gap: 15px; }
-            nav ul { gap: 15px; font-size: 14px; }
-            .header-btn { padding: 6px 12px; font-size: 12px; }
+        /* --- Notification Styles --- */
+        #notification-area {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            z-index: 9999;
+        }
+        .toast {
+            background-color: white;
+            color: #333;
+            padding: 12px 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            margin-top: 10px;
+            font-size: 14px;
+            border-left: 5px solid #4CAF50;
+            animation: slideIn 0.5s ease forwards;
+        }
+        @keyframes slideIn {
+            from { transform: translateX(-100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
         }
 
-        /* --- Split Body Layout --- */
+        /* --- Sections --- */
         .section {
             min-height: 50vh;
             padding: 60px 10%;
@@ -115,44 +124,31 @@
             flex-direction: column;
             justify-content: center;
         }
+        .section-grey { background-color: #262323; color: #FFFFFF; }
+        .section-white { background-color: #ffffff; color: #333; }
 
-        /* Half Grey */
-        .section-grey { 
-            background-color: #262323; 
-            color: #FFFFFF;
-        }
-
-        /* Half White */
-        .section-white { 
-            background-color: #ffffff; 
-            color: #333;
-        }
-
-        /* --- Footer (Same Grey as Top) --- */
         footer {
             background-color: #262323;
             color: #FFFFFF;
             padding: 40px 5%;
             text-align: center;
-            border-top: 1px solid #ccc;
+            border-top: 1px solid #444;
         }
 
-        /* --- Responsive Adjustments --- */
-        @media (max-width: 768px) {
-            .section { padding: 40px 5%; text-align: center; }
-            header h1 { font-size: 1.2rem; }
+        @media (max-width: 850px) {
+            .header-left { gap: 15px; }
+            nav ul { gap: 12px; font-size: 13px; }
         }
     </style>
 </head>
 <body>
 
     <div id="splash">
-        <img src="{{ url_for('static', filename='hey.jpg') }}" alt="Full Screen Logo">
+        <img src="{{ url_for('static', filename='hey.jpg') }}" alt="Splash Logo">
     </div>
 
     <header>
         <div class="header-left">
-            
             <nav>
                 <ul>
                     <li><a href="/" class="home-link">Darja</a></li>
@@ -162,41 +158,38 @@
                 </ul>
             </nav>
         </div>
-
         <div class="header-right">
-            <button class="header-btn">Surprise invite</button>
+            <button class="header-btn" onclick="showNotification()">Click me</button>
         </div>
     </header>
 
     <main>
-        <section class="section section-grey">
+        <section class="section section-grey" id="how-it-works">
             <h2>Distance no longer stands between shared moments.</h2>
             <p>Where movies and moments meet.</p>
         </section>
-
-        <section class="section section-white">
-            <h2>Lower Body</h2>
-            <p>This is the white half of the responsive body.</p>
+        <section class="section section-white" id="features">
+            <h2>Our Features</h2>
+            <p>High quality syncing for the best experience.</p>
         </section>
     </main>
+
+    <div id="notification-area"></div>
 
     <footer>
         <p>&copy; 2026 Development | By VJMSOL </p>
     </footer>
 
     <script>
-        // Wait for page load, then wait 2 seconds, then fade out
         window.addEventListener('load', () => {
             setTimeout(() => {
-                const splash = document.getElementById('splash');
-                splash.classList.add('hidden');
-                // Optional: Re-enable scrolling after splash disappears
+                document.getElementById('splash').classList.add('hidden');
                 document.body.style.overflow = 'auto';
             }, 2000);
         });
-
-        // Prevent scrolling while splash is active
         document.body.style.overflow = 'hidden';
     </script>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>
